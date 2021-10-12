@@ -22,7 +22,7 @@ DEFAULT_HOST = "localhost"
 DEFAULT_PORT = 8125
 DEFAULT_PREFIX = "hass"
 DEFAULT_RATE = 1
-DOMAIN = "datadog"
+DOMAIN = "datadog_custom"
 
 CONFIG_SCHEMA = vol.Schema(
     {
@@ -43,7 +43,6 @@ CONFIG_SCHEMA = vol.Schema(
 
 def setup(hass, config):
     """Set up the Datadog component."""
-
     conf = config[DOMAIN]
     host = conf[CONF_HOST]
     port = conf[CONF_PORT]
@@ -113,5 +112,5 @@ def setup(hass, config):
 
     hass.bus.listen(EVENT_LOGBOOK_ENTRY, logbook_entry_listener)
     hass.bus.listen(EVENT_STATE_CHANGED, state_changed_listener)
-
+    _LOGGER.debug("Datadog custom setup")
     return True
