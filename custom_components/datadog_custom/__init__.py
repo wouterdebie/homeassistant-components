@@ -75,7 +75,7 @@ def setup(hass, config):
             return
 
         states = dict(state.attributes)
-        metric = f"{prefix}.{state.entity_id}"
+
         tags = [f"entity:{state.entity_id}", f"domain:{state.domain}"]
 
         for key, value in states.items():
@@ -89,11 +89,12 @@ def setup(hass, config):
                     tags=tags + [f"attribute:{key}"],
                 )
 
-                _LOGGER.debug("Sent metric %s: %s (tags: %s)", name, value, tags)
+                _LOGGER.debug("Sent attribute metric %s: %s (tags: %s)", name, value, tags)
 
         # If the state can be expressed as number, send the value as a gauge,
         # otherwise, create a datadog event.
         try:
+            metric = f"{prefix}.{state.entity_id}"
             value = state_helper.state_as_number(state)
             statsd.gauge(metric, value, sample_rate=sample_rate, tags=tags)
             _LOGGER.debug("Sent metric %s: %s (tags: %s)", metric, value, tags)
