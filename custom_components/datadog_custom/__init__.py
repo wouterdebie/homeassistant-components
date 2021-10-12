@@ -15,6 +15,11 @@ from homeassistant.const import (
 from homeassistant.helpers import state as state_helper
 import homeassistant.helpers.config_validation as cv
 
+from homeassistant.helpers.entity_registry import (
+    EntityRegistry,
+    async_get,
+)
+
 _LOGGER = logging.getLogger(__name__)
 
 CONF_RATE = "rate"
@@ -80,7 +85,7 @@ def setup(hass, config):
 
         for key, value in states.items():
             if isinstance(value, (float, int)):
-                name = f"{prefix}.{state.domain}.{key.replace(' ', '_')}"
+                name = f"{prefix}.{key.replace(' ', '_')}"
                 value = int(value) if isinstance(value, bool) else value
                 t = tags + [f"attribute:{key}"]
                 statsd.gauge(
@@ -95,7 +100,14 @@ def setup(hass, config):
         # If the state can be expressed as number, send the value as a gauge,
         # otherwise, create a datadog event.
         try:
-            metric = f"{prefix}.{state.entity_id}"
+            ent_reg: EntityRegistry = async_get(hass)
+            if ent_reg.async_is_registered(state.entity_id):
+                entity = ent_reg.async_get(state.entity)
+                _LOGGER.debug(entity)
+                metric = f"{prefix}.{state.entity_id}"
+            else:
+                metric = f"{prefix}.{state.entity_id}"
+
             value = state_helper.state_as_number(state)
             statsd.gauge(metric, value, sample_rate=sample_rate, tags=tags)
             _LOGGER.debug("Sent metric %s: %s (tags: %s)", metric, value, tags)
