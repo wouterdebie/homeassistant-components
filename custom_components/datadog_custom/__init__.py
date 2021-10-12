@@ -90,7 +90,7 @@ def setup(hass, config):
                     tags=t,
                 )
 
-                _LOGGER.debug("Sent attribute metric %s: %s (tags: %s)", name, value, tags)
+                _LOGGER.debug("Sent attribute metric %s: %s (tags: %s)", name, value, t)
 
         # If the state can be expressed as number, send the value as a gauge,
         # otherwise, create a datadog event.
