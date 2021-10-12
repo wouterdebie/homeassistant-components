@@ -1,0 +1,11 @@
+{
+  "codeowners": ["@wouterdebie"],
+  "config_flow": false,
+  "dependencies": [],
+  "documentation": " https://github.com/wouterdebie/homeassistant-components/custom_components/datadog",
+  "domain": "datadog_custom",
+  "iot_class": "local_push",
+  "name": "Datadog Custom Integration",
+  "requirements": ["datadog==0.42.0"],
+  "version": "1.0.0"
+}
