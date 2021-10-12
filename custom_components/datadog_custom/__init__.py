@@ -80,7 +80,7 @@ def setup(hass, config):
 
         for key, value in states.items():
             if isinstance(value, (float, int)):
-                name = f"{metric}.{key.replace(' ', '_')}"
+                name = f"{key.replace(' ', '_')}"
                 value = int(value) if isinstance(value, bool) else value
                 statsd.gauge(
                     name,
@@ -112,5 +112,5 @@ def setup(hass, config):
 
     hass.bus.listen(EVENT_LOGBOOK_ENTRY, logbook_entry_listener)
     hass.bus.listen(EVENT_STATE_CHANGED, state_changed_listener)
-    _LOGGER.debug("Datadog custom setup")
+
     return True
