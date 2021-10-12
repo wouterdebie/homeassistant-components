@@ -80,7 +80,7 @@ def setup(hass, config):
 
         for key, value in states.items():
             if isinstance(value, (float, int)):
-                name = f"{key.replace(' ', '_')}"
+                name = f"{prefix}.{state.domain}.{key.replace(' ', '_')}"
                 value = int(value) if isinstance(value, bool) else value
                 statsd.gauge(
                     name,
