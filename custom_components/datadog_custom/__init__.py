@@ -82,11 +82,12 @@ def setup(hass, config):
             if isinstance(value, (float, int)):
                 name = f"{prefix}.{state.domain}.{key.replace(' ', '_')}"
                 value = int(value) if isinstance(value, bool) else value
+                t = tags + [f"attribute:{key}"]
                 statsd.gauge(
                     name,
                     value,
                     sample_rate=sample_rate,
-                    tags=tags + [f"attribute:{key}"],
+                    tags=t,
                 )
 
                 _LOGGER.debug("Sent attribute metric %s: %s (tags: %s)", name, value, tags)
